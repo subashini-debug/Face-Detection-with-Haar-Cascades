@@ -54,10 +54,10 @@ To write a Python program using OpenCV to perform the following image manipulati
 - **Step 2:** Mark detected faces across the scene and display the result.
 
 ### VI) Perform Eye Detection in Images
-- **Step 1:** Define a function `detect_eyes()` on the extracted ROI or face region.
-- **Step 2:** Apply `eye_cascade.detectMultiScale()` to locate eyes.
-- **Step 3:** Draw bounding rectangles around the detected eyes.
-- **Step 4:** Return and display the processed ROI.
+- **Step 1:** Define a function `detect_eyes()` that creates a copy of the input image.
+- **Step 2:** Detect eyes using `eye_cascade.detectMultiScale(face_img)`.
+- **Step 3:** Draw bounding rectangles around the detected eyes with thickness 2.
+- **Step 4:** Return and display the processed image highlighting the detected eyes.
 
 ### VII) Perform Face Detection on Real-Time Webcam Video
 - **Step 1:** Initialize the video capture stream using `cv2.VideoCapture(0)`.
@@ -144,7 +144,7 @@ def adj_detect_face(img):
         cv2.rectangle(face_img, (x, y), (x + w, y + h), (255, 255, 255), 2) 
         
     cv2.rectangle(face_img, (685, 180), (810, 315), (255, 255, 255), 2)
-    cv2.rectangle(face_img, (735, 480), (860, 605), (255, 255, 255), 2)
+    cv2.rectangle(face_img, (735, 480), (860, 605), (255, 255, 255), 2) 
         
     return face_img
 
@@ -157,19 +157,22 @@ plt.axis('off')
 plt.show()
 
 # ------------------------------------------------------------------------------
-# 6. Eye Detection in Extracted ROI
+# 6. Eye Detection Function using Haar Cascade
 # ------------------------------------------------------------------------------
 def detect_eyes(img):
     face_img = img.copy()
-    cv2.rectangle(face_img, (60, 48), (86, 74), (255, 255, 255), 2)
-    cv2.rectangle(face_img, (96, 52), (122, 78), (255, 255, 255), 2)
+    eyes = eye_cascade.detectMultiScale(face_img) 
+    
+    for (x, y, w, h) in eyes: 
+        cv2.rectangle(face_img, (x, y), (x + w, y + h), (255, 255, 255), 2) 
+        
     return face_img
 
-result_eyes = detect_eyes(roi)
+result_eyes = detect_eyes(img)
 
-plt.figure(figsize=(6, 6))
+plt.figure(figsize=(8, 6))
 plt.imshow(result_eyes, cmap='gray')
-plt.title('Eye Detection in Extracted ROI')
+plt.title('Eye Detection using Haar Cascade')
 plt.axis('off')
 plt.show()
 
@@ -218,7 +221,7 @@ def realtime_webcam_detection():
 ### 4. Adjusted Multi-Face Detection
 ![Adjusted Face Detection](output4_face_detection_adjusted.png)
 
-### 5. Eye Detection in Extracted ROI
+### 5. Eye Detection using Haar Cascade
 ![Eye Detection](output5_eye_detection.png)
 
 ### 6. Real-Time Face Detection with Label (Webcam)
@@ -228,4 +231,4 @@ def realtime_webcam_detection():
 
 ## Result
 
-Thus, a Python program using OpenCV to extract ROI, perform face detection using Haar Cascades in static images, perform eye detection in the extracted ROI, and perform real-time face detection with labels from webcam video is successfully implemented and executed.
+Thus, a Python program using OpenCV to extract ROI, perform face detection using Haar Cascades in static images, perform eye detection using Haar Cascades, and perform real-time face detection with labels from webcam video is successfully implemented and executed.

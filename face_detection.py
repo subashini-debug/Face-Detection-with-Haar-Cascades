@@ -82,18 +82,21 @@ plt.axis('off')
 plt.show()
 
 # ------------------------------------------------------------------------------
-# VI) Perform Eye Detection in Images / ROI
+# VI) Perform Eye Detection in Images
 # ------------------------------------------------------------------------------
 def detect_eyes(img):
     face_img = img.copy()
-    cv2.rectangle(face_img, (60, 48), (86, 74), (255, 255, 255), 2)
-    cv2.rectangle(face_img, (96, 52), (122, 78), (255, 255, 255), 2)
+    eyes = eye_cascade.detectMultiScale(face_img)
+    
+    for (x, y, w, h) in eyes:
+        cv2.rectangle(face_img, (x, y), (x + w, y + h), (255, 255, 255), 2)
+        
     return face_img
 
-result_eyes = detect_eyes(roi)
-plt.figure(figsize=(6, 6))
+result_eyes = detect_eyes(img_gray)
+plt.figure(figsize=(8, 6))
 plt.imshow(result_eyes, cmap='gray')
-plt.title('Eye Detection in Extracted ROI')
+plt.title('Eye Detection using Haar Cascade')
 plt.axis('off')
 plt.show()
 
